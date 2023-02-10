@@ -20,22 +20,42 @@ struct DynaTableau{
 
 void initialise(Liste* liste)
 {
-
+    liste->premier == nullptr;
 }
 
 bool est_vide(const Liste* liste)
 {
-    return false;
+    if (liste->premier == nullptr){
+        return true;
+    }
+    else {
+        return false;
+    }
+    
 }
 
 void ajoute(Liste* liste, int valeur)
 {
+    Noeud *noeud = liste->premier;
+    Noeud *newNoeud = new Noeud();
 
+    newNoeud->donnee = valeur;
+    if (noeud == nullptr){
+        liste->premier = newNoeud;
+    } 
+    else{
+        while (noeud->suivant!=nullptr)
+        {
+            noeud=noeud->suivant;
+        }
+        noeud->suivant=newNoeud;
+        
+    }
 }
 
 void affiche(const Liste* liste)
 {
-
+    
 }
 
 int recupere(const Liste* liste, int n)

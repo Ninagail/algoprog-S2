@@ -2,25 +2,29 @@
 
 using namespace std;
 
-struct Noeud{
+typedef struct Noeud{
     int donnee;
     Noeud* suivant;
 };
 
-struct Liste{
+typedef struct Liste{
     Noeud* premier;
-    // your code
+    
 };
 
 struct DynaTableau{
     int* donnees;
-    // your code
+    
 };
 
 
 void initialise(Liste* liste)
 {
-    liste->premier == nullptr;
+    Liste *liste = new Liste;
+    Noeud *noeud = new Noeud;
+    noeud ->donnee =0;
+    noeud->suivant = NULL;
+    liste->premier = noeud;
 }
 
 bool est_vide(const Liste* liste)
@@ -36,21 +40,19 @@ bool est_vide(const Liste* liste)
 
 void ajoute(Liste* liste, int valeur)
 {
-    Noeud *noeud = liste->premier;
-    Noeud *newNoeud = new Noeud();
+    //Noeud *noeud = liste->premier;
 
+    Noeud *newNoeud = new Noeud;
     newNoeud->donnee = valeur;
-    if (noeud == nullptr){
-        liste->premier = newNoeud;
+    
+    if (liste== NULL || newNoeud == NULL){
+        exit(EXIT_FAILURE);
     } 
-    else{
-        while (noeud->suivant!=nullptr)
-        {
-            noeud=noeud->suivant;
-        }
-        noeud->suivant=newNoeud;
+    
+    newNoeud->suivant = liste->premier;
+    liste->premier=newNoeud;
         
-    }
+    
 }
 
 void affiche(const Liste* liste)

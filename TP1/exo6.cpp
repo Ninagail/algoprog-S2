@@ -40,11 +40,9 @@ bool est_vide(const Liste* liste)
 
 void ajoute(Liste* liste, int valeur)
 {
-    //Noeud *noeud = liste->premier;
-
     Noeud *newNoeud = new Noeud;
     newNoeud->donnee = valeur;
-    
+
     if (liste== NULL || newNoeud == NULL){
         exit(EXIT_FAILURE);
     } 
@@ -57,7 +55,12 @@ void ajoute(Liste* liste, int valeur)
 
 void affiche(const Liste* liste)
 {
-    
+   Noeud *actuel = liste->premier;
+   while (actuel != NULL){
+
+    cout << actuel->donnee << endl;
+    actuel= actuel->suivant;
+   } 
 }
 
 int recupere(const Liste* liste, int n)

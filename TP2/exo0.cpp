@@ -1,27 +1,35 @@
-#include <QApplication>
-#include <time.h>
+/* Sans QT creator*/
 
-#include "tp2.h"
+#include <stdlib.h>
+#include <vector>
+#include <iostream>
+#include <string.h>
+using namespace std;
 
-MainWindow* w = nullptr;
+typedef unsigned int uint ;
+typedef int int32 ;
+typedef unsigned short int uint8 ;
+typedef unsigned long int uint64 ;
 
-void slow_sort(Array& toSort){
+
+void slow_sort(std::vector<int> & toSort){
     for (uint i=0; i<toSort.size(); i++)
     {
         for (uint j=0; j<toSort.size(); j++)
         {
             if (toSort[j] > toSort[i])
-                toSort.swap(i, j);
+                std::swap(toSort[i], toSort[j]);
         }
     }
 }
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
-    MainWindow::instruction_duration = 100; // delay between each array access (set, get, insert, ...)
-    w = new TestMainWindow(slow_sort); // window which display the behavior of the sort algorithm
-    w->show();
+	std::vector<int> tab({8,1,5,9,11,3});
+    slow_sort(tab);
 
-	return a.exec();
+    for (int i=0; i<tab.size(); i++){
+        std::cout << tab[i] << endl;
+
+    }
 }

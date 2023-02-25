@@ -1,25 +1,48 @@
-#include <QApplication>
-#include <time.h>
+/* Sans QT creator*/
 
-#include "tp2.h"
+#include <stdlib.h>
+#include <vector>
+#include <iostream>
+#include <string.h>
+using namespace std;
 
-MainWindow* w=nullptr;
+typedef unsigned int uint ;
+typedef int int32 ;
+typedef unsigned short int uint8 ;
+typedef unsigned long int uint64 ;
 
-void insertionSort(Array& toSort){
-	Array& sorted=w->newArray(toSort.size());
+
+void insertionSort(vector<int> & toSort){
+	//Array &sorted=w->newArray(toSort.size());
+	vector<int> sorted[toSort.size()];
+	sorted[0] = toSort[0];
+	for(uint i=1; i<toSort.size(); i++){
+		for(uint j=0; j<toSort.size(); j++){
+			if(toSort[i]<toSort[j]){
+				sorted.insert(j, toSort[i]);
+			
+		}
+		else{
+			sorted[j]=toSort[i];
+		}
+		}
+		
+	}
 
 	// insertion sort from toSort to sorted
 	
 	toSort=sorted; // update the original array
+
+
 }
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
-    uint elementCount=15; // number of elements to sort
-    MainWindow::instruction_duration = 100; // delay between each array access (set, get, insert, ...)
-    w = new TestMainWindow(insertionSort); // window which display the behavior of the sort algorithm
-	w->show();
+	vector<int> tab({8,1,5,9,11,3});
+    insertionSort(tab);
 
-	return a.exec();
+    for (int i=0; i<tab.size(); i++){
+        cout << tab[i] << endl;
+
+    }
 }

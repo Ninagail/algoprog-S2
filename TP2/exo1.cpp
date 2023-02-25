@@ -12,17 +12,17 @@ typedef unsigned short int uint8 ;
 typedef unsigned long int uint64 ;
 
 
-void selectionSort(std::vector<int> & toSort){
+void selectionSort(vector<int> & toSort){
 	for (uint i=0; i<toSort.size(); i++)
     {
         int min = i;
-        for (int j=i; j<toSort.size(); j++)
+        for (uint j=i; j<toSort.size(); j++)
         {
             if (toSort[j] < toSort[min] ){
                 min=j;
             }
             if (min != i){
-            std::swap(toSort[i], toSort[min]);
+            swap(toSort[i], toSort[min]);
             }
         }
         
@@ -31,11 +31,11 @@ void selectionSort(std::vector<int> & toSort){
 
 int main(int argc, char *argv[])
 {
-	std::vector<int> tab({8,1,5,9,11,3});
+	vector<int> tab({8,1,5,9,11,3});
     selectionSort(tab);
 
     for (int i=0; i<tab.size(); i++){
-        std::cout << tab[i] << endl;
+        cout << tab[i] << endl;
 
     }
 }

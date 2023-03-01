@@ -8,9 +8,12 @@ int fibonacci(int value)
 {
     Context _("fibonacci", value); // do not care about this, it allow the display of call stack
 
-    // your code
-
-    return_and_display(value);
+    if (value == 0 || value == 1) {
+        return value;
+    }
+    else{
+        return_and_display(fibonacci(value-1) + fibonacci(value-2));
+    }
 }
 
 int main(int argc, char *argv[])

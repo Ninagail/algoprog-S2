@@ -24,3 +24,5 @@ int main(int argc, char *argv[])
 
     return a.exec(); // main loop while window is opened
 }
+
+

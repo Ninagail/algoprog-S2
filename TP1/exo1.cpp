@@ -11,9 +11,7 @@ long power(long value, long n)
     if (n ==0){
         return 1;
     }
-    //else if(value ==1){
-    //    return 1;
-    //}
+    
     else{
         int result = value * power(value, n-1);
         // return_and_display shows the result in the window and returns it

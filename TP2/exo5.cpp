@@ -13,17 +13,38 @@ void splitAndMerge(Array& origin)
 	// initialisation
 	Array& first = w->newArray(origin.size()/2);
 	Array& second = w->newArray(origin.size()-first.size());
+	//int pivot = origin.size()-1;
+	//int valeurPivot = origin[pivot];
 	
 	// split
-
+	for(int i=0; i< first.size(); i++){
+		first[i]=origin[i];
+	}
+	for (int i=0; i<second.size(); i++){
+		for(int j=first.size(); j<= origin.size(); j++){
+			second[i] = origin[j];
+		}
+		
+	}
 	// recursiv splitAndMerge of lowerArray and greaterArray
+	splitAndMerge(first);
+	splitAndMerge(second);
 
 	// merge
+	merge(first, second, origin);
+
 }
 
 void merge(Array& first, Array& second, Array& result)
 {
-
+	for (int i =0; i<result.size()+1; i++){
+		if (first[i]<second[i]){
+			result[i]= first [i];
+		}
+		else {
+			result[i]= second[i];
+		}
+	}
 }
 
 void mergeSort(Array& toSort)

@@ -8,7 +8,7 @@
 MainWindow* w = nullptr;
 using std::size_t;
 using std::string;
-
+// (j-1)/2 pour avoir l'indice du parent.
 int Heap::leftChild(int nodeIndex)
 {
     return 0;

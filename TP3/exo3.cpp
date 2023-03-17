@@ -17,20 +17,30 @@ struct SearchTreeNode : public Node
     void initNode(int value)
     {
         // init initial node without children
-        this -> value = 0;
+        this -> value = value;
         this -> left = NULL;
         this -> right = NULL;   
     }
 
 	void insertNumber(int value) {
         // create a new node and insert it in right or left child
-        Node *newNode = new Node;
+        SearchTreeNode *newNode = new SearchTreeNode(value);
         newNode -> value = value;
         if(newNode->value < this->value){
-            this -> left = newNode;
+            if(this->left==nullptr){
+                this -> left = newNode;
+            }
+            else{
+                this->left->insertNumber(value);
+            }
         }
-        else{
-            this -> right = newNode;
+        else if (newNode->value > this->value){
+            if(this->right==nullptr){
+                this->right = newNode;
+            }
+            else{
+                this->right->insertNumber(value);
+            }
         }
         
     }
@@ -41,22 +51,23 @@ struct SearchTreeNode : public Node
         // just 1
         int heightLeft =0;
         int heightRight =0;
-        if (this->left==NULL && this->right==NULL){
+        if (this->isLeaf()){
             return 1;
         }
         else{
-            while(this->left==value ){
-                heightLeft =+1;
+            if(this->left!= nullptr ){
+                heightLeft =this->left->height();
             }
-            while(this->right == value){
-                heightRight =+1;
+            if(this->right != nullptr){
+                heightRight =this->right->height();
             }
         }
+        // +1 pour le parent
         if (heightLeft<heightRight){
-            return heightRight;
+            return heightRight+1;
         }
         else {
-            return heightLeft;
+            return heightLeft+1;
         }
         
         
@@ -68,17 +79,17 @@ struct SearchTreeNode : public Node
         // just 1
         int countLeft = 0;
         int countRight =0;
-        if (this->left==NULL && this->right==NULL){
+        if (this->isLeaf()){
            return 1;
         }
         else {
-            while(this->left !=nullptr){
-                countLeft+=1;
+            if(this->left !=nullptr){
+                countLeft = this->left->nodesCount();
             }
-            while(this->right !=nullptr){
-                countRight+=1;
+            if(this->right !=nullptr){
+                countRight= this->right->nodesCount();
             }
-            return countLeft+countRight;
+            return countLeft+countRight+1;
         }
         
 	}
@@ -101,26 +112,53 @@ struct SearchTreeNode : public Node
             leavesCount ++;
         }
 
-        while (this->right !=nullptr){
-            leaves[leavesCount]=this->right;
-            leavesCount ++;
+        if (this->right !=nullptr){
+            this->right->allLeaves(leaves, leavesCount);
+            
         }
-        while (this->left !=nullptr){
-            leaves[leavesCount]=this->left;
-            leavesCount ++;
+        if (this->left !=nullptr){
+            this->left->allLeaves(leaves, leavesCount);
+            
         }
 	}
 
 	void inorderTravel(Node* nodes[], uint& nodesCount) {
         // fill nodes array with all nodes with inorder travel
+        if(this->left!=nullptr){
+            this->left->inorderTravel(nodes, nodesCount);
+        }
+        nodes[nodesCount]= this;
+        nodesCount ++;
+        if(this->right!=nullptr){
+            this->right->inorderTravel(nodes, nodesCount);
+        }
+
 	}
 
 	void preorderTravel(Node* nodes[], uint& nodesCount) {
         // fill nodes array with all nodes with preorder travel
+        nodes[nodesCount]= this;
+        nodesCount++;
+        if(this->left!=nullptr){
+            this->left->preorderTravel(nodes, nodesCount);
+        }
+        if(this->right!=nullptr){
+            this->right->preorderTravel(nodes, nodesCount);
+        }
+
+
 	}
 
 	void postorderTravel(Node* nodes[], uint& nodesCount) {
         // fill nodes array with all nodes with postorder travel
+        if(this->left!=nullptr){
+            this->left->postorderTravel(nodes, nodesCount);
+        }
+        if(this->right!=nullptr){
+            this->right->postorderTravel(nodes, nodesCount);
+        }
+        nodes[nodesCount]= this;
+        nodesCount++;
 	}
 
 	Node* find(int value) {
@@ -129,11 +167,15 @@ struct SearchTreeNode : public Node
             return this;
         }
         else{
-            if (this->value<value){
-                this->left->find(value);
+            if (this->value>value){
+                if(this->left!=nullptr){
+                    return this->left->find(value);
+                }
             }
             else {
-                this->right->find(value);
+                if(this->right!=nullptr){
+                    return this->right->find(value);
+                }
             }
         }
 		return nullptr;

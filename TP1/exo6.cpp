@@ -22,11 +22,7 @@ struct DynaTableau{
 
 void initialise(Liste* liste)
 {
-    liste = new Liste;
-    Noeud *noeud = new Noeud;
-    noeud ->donnee =0;
-    noeud->suivant = NULL;
-    liste->premier = noeud;
+    liste->premier = nullptr;
 }
 
 bool est_vide(const Liste* liste)

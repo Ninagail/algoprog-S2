@@ -59,6 +59,10 @@ void processCharFrequences(string data, Array& frequences)
 
     // Your code
     frequences.fill(0);
+    for(int i=0; i<data.size(); i++){
+        frequences[data[i]]++;
+    }
+    
 }
 
 void HuffmanHeap::insertHeapNode(int heapSize, HuffmanNode* newNode)
@@ -74,6 +78,15 @@ void HuffmanHeap::insertHeapNode(int heapSize, HuffmanNode* newNode)
 
     // Your code
     int i = heapSize;
+    
+    this->set(heapSize, newNode);
+
+    while (i>0 && this->get(i)->frequences < this->get((i-1)/2)->frequences){
+        swap(i, ((i-1)/2));
+        i= ((i-1)/2);
+        
+    }
+  
 
 }
 
@@ -87,6 +100,14 @@ void buildHuffmanHeap(const Array& frequences, HuffmanHeap& priorityMinHeap, int
 
     // Your code
     heapSize = 0;
+    for(int i =heapSize; i<frequences.size(); i++){
+        if (frequences[i]>0){
+            HuffmanNode* node = new HuffmanNode(i, frequences[i]);
+            priorityMinHeap.insertHeapNode(heapSize, node);
+            heapSize ++;
+        }
+    }
+
 
 }
 
@@ -99,7 +120,14 @@ void HuffmanHeap::heapify(int heapSize, int nodeIndex)
       * you can use `this->swap(firstIndex, secondIndex)`
      **/
     // Your code
-
+    int min_heap = nodeIndex;
+    for(int i = nodeIndex; i < heapSize; i++){
+        if (this->get(i)->frequences < this->get(min_heap)->frequences){
+            min_heap = i;
+        }
+    }
+    swap(nodeIndex, min_heap);
+    heapify(min_heap, heapSize);
 }
 
 
@@ -112,6 +140,12 @@ HuffmanNode* HuffmanHeap::extractMinNode(int heapSize)
      **/
 
     // Your code
+
+    HuffmanNode *min = this->get(0);
+    this->swap(0, heapSize-1);
+    this->heapify(heapSize-1, 0);
+    return min;
+
 }
 
 HuffmanNode* makeHuffmanSubTree(HuffmanNode* rightNode, HuffmanNode* leftNode)
@@ -123,7 +157,11 @@ HuffmanNode* makeHuffmanSubTree(HuffmanNode* rightNode, HuffmanNode* leftNode)
      * Return the new HuffmanNode* parent
      **/
     // Your code
-    return new HuffmanNode('\0');
+    HuffmanNode *sub = new HuffmanNode('\0');
+    sub->right = rightNode;
+    sub->left = leftNode;
+    sub->frequences = rightNode->frequences + leftNode->frequences;
+    return sub;
 }
 
 HuffmanNode* buildHuffmanTree(HuffmanHeap& priorityMinHeap, int heapSize)
@@ -136,7 +174,16 @@ HuffmanNode* buildHuffmanTree(HuffmanHeap& priorityMinHeap, int heapSize)
      **/
 
     // Your code
-    return new HuffmanNode('?');
+    while(heapSize>1){
+        HuffmanNode* leftchild = priorityMinHeap.extractMinNode(heapSize);
+        heapSize --;
+        HuffmanNode* rightchild = priorityMinHeap.extractMinNode(heapSize);
+        heapSize --;
+        HuffmanNode* parent = makeHuffmanSubTree(leftchild, rightchild);
+        priorityMinHeap.insertHeapNode(heapSize, parent);
+        heapSize ++;
+    }
+    return priorityMinHeap.extractMinNode(heapSize);
 }
 
 void HuffmanNode::processCodes(const std::string& baseCode)
@@ -150,6 +197,14 @@ void HuffmanNode::processCodes(const std::string& baseCode)
      **/
 
     // Your code
+    if(this->isLeaf()){
+        this->code = baseCode;
+    }
+    else{
+        this->left->processCodes(baseCode+'0');
+        this->right->processCodes(baseCode+'1');
+    }
+
 }
 
 void HuffmanNode::fillCharactersArray(std::string charactersCodes[])
@@ -180,7 +235,10 @@ string huffmanEncode(const string& toEncode, HuffmanNode* huffmanTree)
     std::string charactersCodes[256]; // array of 256 huffman codes for each character
     huffmanTree->fillCharactersArray(charactersCodes);
     string encoded = "";
-
+    for(int i= 0; i< toEncode.size(); i ++){
+        int acoder = (int)toEncode[i];
+        encoded += charactersCodes[acoder];
+    }
     return encoded;
 }
 
@@ -194,6 +252,22 @@ string huffmanDecode(const string& toDecode, const HuffmanNode& huffmanTreeRoot)
      **/
     // Your code
     string decoded = "";
+    const HuffmanNode* decod = &huffmanTreeRoot;
+    for(int i = 0; i< toDecode.size(); i++){
+        if(decod->isLeaf()){
+            decoded += decod->character;
+            decod = &huffmanTreeRoot;
+
+        }
+        else{
+            if(toDecode[i]=='0'){
+                decod=decod->left;
+            }
+            else{
+                decod=decod->right;
+            }
+        }
+    }
 
     return decoded;
 }
